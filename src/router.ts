@@ -1,4 +1,10 @@
-function route (handle, pathname, response) {
+import { Response } from "express";
+
+export interface HandlerMap {
+    [path: string] : Function
+}
+
+export function route (handle: HandlerMap, pathname: string, response: Response) {
     console.log('about to route a request for ' + pathname)
     if (typeof handle[pathname] === 'function') {
         handle[pathname](response)
@@ -9,5 +15,3 @@ function route (handle, pathname, response) {
         response.end()
     }
 }
-
-exports.router = route
