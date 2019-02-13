@@ -1,18 +1,21 @@
-import * as router from "./router"
-import * as handlers from "./handlers"
-import { Request, Response, Router } from "express";
+//import { Request, Response, Router } from "express";
+import * as express from "express";
 
-var http = require('http')
-var url = require('url')
+class App {
+    public app: express.Application
 
-export function start () {
-    
-    function onRequest (request: Request, response: Response) {
-        var pathname = url.parse(request.url).pathname
-        console.log('request for ' + pathname + ' received.')
-        router.route(handlers.handlers, pathname, response) // injected function call
+    constructor() {
+        this.app = express.default()
+
+        this.app.use('/*', function(req, res, next) {
+            req.requestTime = Date.now()
+            const isoDateString:string = new Date(req.requestTime).toISOString();
+            console.log(`[${isoDateString}] Request - Type: ${req.method}, URL: ${req.originalUrl}`);
+            next();
+        }, function (req, res, next) {
+            next();
+        })
     }
-
-    http.createServer(onRequest).listen(8888)
-    console.log('Server has started.')
 }
+
+export default App;

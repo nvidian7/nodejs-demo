@@ -1,17 +1,13 @@
-import { Response } from "express";
+import * as express from "express";
 
-export interface HandlerMap {
-    [path: string] : Function
-}
+const router:express.Router = express.Router();
 
-export function route (handle: HandlerMap, pathname: string, response: Response) {
-    console.log('about to route a request for ' + pathname)
-    if (typeof handle[pathname] === 'function') {
-        handle[pathname](response)
-    } else {
-        console.log('no request handler found for ' + pathname)
-        response.writeHead(404, { 'Content-Type': 'application/json' })
-        response.write('404 Not found')
-        response.end()
-    }
-}
+router.get("/", function (req, res) {
+    res.json({response: "Hello, World!"})
+})
+
+router.get("/about", function (req, res) {
+    res.json({response: "Express + TypeScript boilerplate restful api server"})
+})
+
+export default router
